@@ -19,7 +19,7 @@ const socketServer = socketIo(httpServer, {
   });
 
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 httpServer.listen(port);
 console.log('Server listening at port %d', port);
