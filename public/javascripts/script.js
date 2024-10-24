@@ -1,5 +1,6 @@
 // Canvas Related 
-const url = 'http://localhost:3000';
+// const url = 'http://localhost:3000';
+const url = 'https://multi-player-pong.onrender.com';
 
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
