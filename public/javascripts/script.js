@@ -93,7 +93,7 @@ function renderCanvas() {
 function ballReset() {
   ballX = width / 2;
   ballY = height / 2;
-  speedY = 2;
+  // speedY = 2;
 
   socket.emit('ballMoved', {
     ballX,
@@ -138,17 +138,17 @@ function ballBoundaries() {
         if (speedY > 5) {
           speedY = 5;
         }
-        if(speedX > 5){
-          speedX = 5;
-        }
+        // if(speedX > 5){
+        //   speedX = 5;
+        // }
       }
       ballDirection = -ballDirection;
       trajectoryX[0] = ballX - (paddleX[0] + paddleDiff);
-      speedX = trajectoryX[0] * 0.04;
+      speedX = trajectoryX[0] * 0.05;
     } 
     
     if(ballX < paddleX[0] || ballX > paddleX[0] + paddleWidth){
-      // Let the ball hit the edge of the canvas
+      // Ball hits the edge of the canvas
       if(ballY > height){
         ballReset();
         score[1]++;
@@ -173,23 +173,27 @@ function ballBoundaries() {
         if (speedY > 5) {
           speedY = 5;
         }
-        if(speedX > 5){
-          speedX = 5;
-        }
+        // if(speedX > 5){
+        //   speedX = 5;
+        // }
       }
       ballDirection = -ballDirection;
       trajectoryX[1] = ballX - (paddleX[1] + paddleDiff);
-      speedX = trajectoryX[1] * 0.04;
+      speedX = trajectoryX[1] * 0.05;
     } 
-
-    if (ballX < paddleX[1] || ballX > paddleX[1] + paddleWidth) {
-      // Let the ball hit the edge of the canvas
-      if(ballY < 0){
-        ballReset();
-        score[0]++;
-      }
-
+    // if(ballX < paddleX[1] || ballX > paddleX[1] + paddleWidth){
+    //   // Ball hits the edge of the canvas
+    //   if(ballY < 0){
+    //     ballReset();
+    //     score[0]++;
+    //   }
+      
+    // }
+    if(ballY < 0){
+      ballReset();
+      score[0]++;
     }
+    
   }
 }
 
