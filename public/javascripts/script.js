@@ -13,7 +13,7 @@ let height = 700;
 
 // Paddle
 let paddleHeight = 10;
-let paddleWidth = 50;
+let paddleWidth = 90;
 let paddleDiff = 25;
 let paddleX = [ 225, 225 ];
 let trajectoryX = [ 0, 0 ];
@@ -93,7 +93,7 @@ function renderCanvas() {
 function ballReset() {
   ballX = width / 2;
   ballY = height / 2;
-  speedY = 3;
+  speedY = 2;
 
   socket.emit('ballMoved', {
     ballX,
@@ -133,42 +133,62 @@ function ballBoundaries() {
     if (ballX >= paddleX[0] && ballX <= paddleX[0] + paddleWidth) {
       // Add Speed on Hit
       if (playerMoved) {
-        speedY += 1;
+        speedY += 0.2;
         // Max Speed
         if (speedY > 5) {
           speedY = 5;
         }
+        if(speedX > 5){
+          speedX = 5;
+        }
       }
       ballDirection = -ballDirection;
       trajectoryX[0] = ballX - (paddleX[0] + paddleDiff);
-      speedX = trajectoryX[0] * 0.3;
-    } else {
-      // Reset Ball, add to Computer Score
-      ballReset();
-      score[1]++;
+      speedX = trajectoryX[0] * 0.04;
+    } 
+    
+    if(ballX < paddleX[0] || ballX > paddleX[0] + paddleWidth){
+      // Let the ball hit the edge of the canvas
+      if(ballY > height){
+        ballReset();
+        score[1]++;
+      }
+      
     }
+
+    
+    // else {
+    //   // Reset Ball, add to Computer Score
+    //   ballReset();
+    //   score[1]++;
+    // }
   }
   // Bounce off computer paddle (top)
   if (ballY < paddleDiff) {
     if (ballX >= paddleX[1] && ballX <= paddleX[1] + paddleWidth) {
       // Add Speed on Hit
       if (playerMoved) {
-        speedY += 1;
+        speedY += 0.2;
         // Max Speed
         if (speedY > 5) {
           speedY = 5;
         }
+        if(speedX > 5){
+          speedX = 5;
+        }
       }
       ballDirection = -ballDirection;
       trajectoryX[1] = ballX - (paddleX[1] + paddleDiff);
-      speedX = trajectoryX[1] * 0.3;
-    } else {
-      // Reset Ball, Increase Computer Difficulty, add to Player Score
-      // if (computerSpeed < 6) {
-      //   computerSpeed += 0.5;
-      // }
-      ballReset();
-      score[0]++;
+      speedX = trajectoryX[1] * 0.04;
+    } 
+
+    if (ballX < paddleX[1] || ballX > paddleX[1] + paddleWidth) {
+      // Let the ball hit the edge of the canvas
+      if(ballY < 0){
+        ballReset();
+        score[0]++;
+      }
+
     }
   }
 }
