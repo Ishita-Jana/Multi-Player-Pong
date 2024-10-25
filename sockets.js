@@ -1,5 +1,6 @@
 
 let readyPlayersCount = 0;
+const rooms = {};
 
 function listen(io) {
     
@@ -40,7 +41,17 @@ function listen(io) {
             // console.log('readyPlayersCount', readyPlayersCount);
             if(readyPlayersCount % 2==0){
                 // pongNamespace.emit('startGame', socket.id);
-                pongNamespace.in(room).emit('startGame', socket.id);
+
+                rooms[room] = {
+                    speedX:0,
+                    speedY:2,
+                }
+                // pongNamespace.in(room).emit('startGame', socket.id);
+                pongNamespace.in(room).emit('startGame', {
+                    refereeId: socket.id,
+                    initialSpeedX: rooms[room].speedX,
+                    initialSpeedY: rooms[room].speedY
+                });
                 
                 
             }

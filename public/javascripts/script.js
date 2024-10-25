@@ -26,9 +26,12 @@ let ballRadius = 5;
 let ballDirection = 1;
 
 // Speed
-let speedY = 2;
-let speedX = 0;
+// let speedY = 2;
+// let speedX = 0;
 // let computerSpeed = 4;
+
+let speedX;
+let speedY;
 
 // Score for Both Players
 let score = [ 0, 0 ];
@@ -228,16 +231,13 @@ function animate() {
 }
 
 // Load Game, Reset Everything
-function loadGame() {
-  createCanvas();
-  renderIntro();
-  socket.emit('ready');
-}
+
 
 
 //Start Game
-function startGame() {
-  
+function startGame(initialSpeedX,initialSpeedY) {
+  speedX=initialSpeedX;
+  speedY=initialSpeedY;
   paddleIndex = referee ? 0 : 1;
   window.requestAnimationFrame(animate);
   canvas.addEventListener('mousemove', (e) => {
@@ -261,8 +261,17 @@ function startGame() {
   });
 }
 
-// On Load
-loadGame();
+
+
+function loadGame() {
+  createCanvas();
+  renderIntro();
+  socket.emit('ready');
+}
+
+
+
+
 
 
 socket.on('connection', ()=>{
@@ -271,16 +280,23 @@ socket.on('connection', ()=>{
 
 
 //Waiting for the second player to join
-socket.on('startGame', (refereeId) => {
-  console.log('Game started', refereeId);
+// socket.on('startGame', (refereeId) => {
+//   console.log('Game started', refereeId);
+//   referee = socket.id === refereeId;
+//   startGame();
+//   // console.log('socket id', socket.id);
+//   // console.log('Referee', refereeId);
+//   // console.log('Referee', referee);
+  
+  
+// })
+
+
+socket.on('startGame', ({ refereeId, initialSpeedX, initialSpeedY }) => {
+  console.log('Game started with referee:', refereeId);
   referee = socket.id === refereeId;
-  startGame();
-  // console.log('socket id', socket.id);
-  // console.log('Referee', refereeId);
-  // console.log('Referee', referee);
-  
-  
-})
+  startGame(initialSpeedX, initialSpeedY);
+});
 
 
 socket.on('paddleMoved', (paddleData) => {
@@ -303,3 +319,6 @@ socket.on('connect_error', (err) => {
 socket.on('disconnect', (reason) => {
   console.log('Disconnected:', reason);
 });
+
+// On Load
+loadGame();
