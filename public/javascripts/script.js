@@ -33,6 +33,10 @@ let ballDirection = 1;
 let speedX;
 let speedY;
 
+//FrameRate
+let lastTime = 0;
+
+
 // Score for Both Players
 let score = [ 0, 0 ];
 
@@ -106,12 +110,17 @@ function ballReset() {
 }
 
 // Adjust Ball Movement
-function ballMove() {
+function ballMove(deltaTime) {
+
+  if (!deltaTime) return;
+
+
+  const timeFactor = Math.max(deltaTime / 16, 0.1);
   // Vertical Speed
-  ballY += speedY * ballDirection;
+  ballY += speedY * timeFactor * ballDirection;
   // Horizontal Speed
   if (playerMoved) {
-    ballX += speedX;
+    ballX += speedX * timeFactor ;
   }
 
   socket.emit('ballMoved', {
@@ -217,11 +226,14 @@ function ballBoundaries() {
 // }
 
 // Called Every Frame
-function animate() {
+function animate(currentTime) {
  // computerAI();
 
+// Calculate the time elapsed since the last frame
+ const deltaTime = (currentTime - lastTime) ;
+ lastTime = currentTime;
  if(referee){
-  ballMove();
+  ballMove(deltaTime);
   ballBoundaries();
  }
   
